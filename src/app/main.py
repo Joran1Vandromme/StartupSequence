@@ -23,6 +23,10 @@ def main():
 
     parser_list_steps = subparsers.add_parser("step-list", help="toon de stappen van een opstartingssequence")
     parser_list_steps.add_argument("sequence_naam", type=str)
+    
+    parser_export = subparsers.add_parser("export-csv", help="exporteer rapport naar CSV")
+    parser_export.add_argument("pad", type=str, help="pad naar csv bestand, bv rapport.csv")
+
 
 
     args = parser.parse_args()
@@ -69,6 +73,19 @@ def main():
         stappen = step_repo.stappen_van_sequence(seq.id)
         for st in stappen:
             print(st.volgorde, st.actie, st.seconden, "sec")
+    elif args.command == "export-csv":
+        step_repo = StepRepo(db_path)
+        rows = step_repo.rapport_rows()
+
+        import csv
+        with open(args.pad, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f, delimiter=";")
+            writer.writerow(["sequence_naam", "volgorde", "actie", "seconden", "actief"])
+            for r in rows:
+                writer.writerow(r)
+
+    print("CSV gemaakt:", args.pad)
+
 
 
 

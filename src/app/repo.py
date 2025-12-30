@@ -116,3 +116,18 @@ class StepRepo:
 
         return stappen
 
+    def rapport_rows(self):
+        sql = """
+        SELECT s.name, st.step_order, st.action_type, st.seconds, st.enabled
+        FROM steps st
+        JOIN sequences s ON s.id = st.sequence_id
+        ORDER BY s.name, st.step_order
+        """
+        conn = sqlite3.connect(self.db_path)
+        cur = conn.cursor()
+        cur.execute(sql)
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+        return rows
+
