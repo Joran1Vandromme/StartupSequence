@@ -2,7 +2,7 @@ import argparse
 
 from app.config import load_settings
 from app.db import init_db
-from app.repo import SequenceRepo
+from app.repo import SequenceRepo, StepRepo
 
 
 def main():
@@ -16,6 +16,14 @@ def main():
     parser_add.add_argument("beschrijving", type=str)
 
     subparsers.add_parser("sequence-list", help="toon alle sequences")
+    
+    parser_step = subparsers.add_parser("step-add-wait", help="voeg een wacht moment toe")
+    parser_step.add_argument("sequence_naam", type=str)
+    parser_step.add_argument("seconden", type=int)
+
+    parser_list_steps = subparsers.add_parser("step-list", help="toon de stappen van een opstartingssequence")
+    parser_list_steps.add_argument("sequence_naam", type=str)
+
 
     args = parser.parse_args()
 
@@ -36,6 +44,32 @@ def main():
         sequences = repo.alles_ophalen()
         for seq in sequences:
             print(seq.id, seq.naam, "-", seq.beschrijving)
+            
+    elif args.command == "step-add-wait":
+        seq_repo = SequenceRepo(db_path)
+        step_repo = StepRepo(db_path)
+
+        seq = seq_repo.zoek_op_naam(args.sequence_naam)
+        if seq is None:
+            print("Sequence niet gevonden.")
+            return
+
+        step_repo.voeg_wait_toe(seq.id, args.seconden)
+        print("Wacht periode toegevoegd.")
+
+    elif args.command == "step-list":
+        seq_repo = SequenceRepo(db_path)
+        step_repo = StepRepo(db_path)
+
+        seq = seq_repo.zoek_op_naam(args.sequence_naam)
+        if seq is None:
+            print("Sequence niet gevonden.")
+            return
+
+        stappen = step_repo.stappen_van_sequence(seq.id)
+        for st in stappen:
+            print(st.volgorde, st.actie, st.seconden, "sec")
+
 
 
 if __name__ == "__main__":

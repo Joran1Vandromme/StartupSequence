@@ -75,10 +75,10 @@ class StepRepo:
         cur = conn.cursor()
 
         sql = """
-        INSERT INTO steps (sequence_id, step_order, action_type, seconds, enabled)
-        VALUES (?, ?, 'WAIT', ?, 1)
+        INSERT INTO steps (sequence_id, step_order, action_type, command, args, seconds, enabled)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         """
-        cur.execute(sql, (sequence_id, volgorde, seconden))
+        cur.execute(sql, (sequence_id, volgorde, "WAIT", "", "", seconden, 1))
 
         conn.commit()
         cur.close()
@@ -106,7 +106,7 @@ class StepRepo:
                 id=row[0],
                 reeks_id=row[1],
                 volgorde=row[2],
-                actie_type=row[3],
+                actie=row[3],
                 commando=row[4],
                 argumenten=row[5],
                 seconden=row[6],
