@@ -216,3 +216,5 @@ settings.json
 data/
 exports/
 
+# csv rapporten
+*.csv
