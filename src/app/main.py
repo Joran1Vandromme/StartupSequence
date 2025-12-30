@@ -84,7 +84,7 @@ def main():
             for r in rows:
                 writer.writerow(r)
 
-    print("CSV gemaakt:", args.pad)
+        print("CSV gemaakt:", args.pad)
 
 
 
