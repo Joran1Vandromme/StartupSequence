@@ -30,7 +30,7 @@ class SequenceRepo:
 
         resultaten = []
         for row in rows:
-            seq = Sequence(id=row[0], name=row[1], description=row[2])
+            seq = Sequence(id=row[0], naam=row[1], beschrijving=row[2])
             resultaten.append(seq)
 
         return resultaten
@@ -49,8 +49,7 @@ class SequenceRepo:
         if row is None:
             return None
 
-        return Sequence(id=row[0], name=row[1], description=row[2])
-
+        return Sequence(id=row[0], naam=row[1], beschrijving=row[2])
 
 class StepRepo:
     def __init__(self, db_path: str):
@@ -105,13 +104,13 @@ class StepRepo:
         for row in rows:
             st = Step(
                 id=row[0],
-                sequence_id=row[1],
-                step_order=row[2],
-                action_type=row[3],
-                command=row[4],
-                args=row[5],
-                seconds=row[6],
-                enabled=bool(row[7]),
+                reeks_id=row[1],
+                volgorde=row[2],
+                actie_type=row[3],
+                commando=row[4],
+                argumenten=row[5],
+                seconden=row[6],
+                actief=bool(row[7]),
             )
             stappen.append(st)
 
